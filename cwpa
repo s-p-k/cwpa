@@ -22,6 +22,7 @@ usage () {
     printf "%s -h:    show this message\n" "$0"
     printf "%s -l:    list configured networks\n" "$0"
     printf "%s -c:    connect to one of the networks listed with the -l option\n" "$0"
+    printf "%s -d:    disconnect from network\n" "$0"
     printf "%s -v:    show cwpa version\n" "$0"
 }
 
@@ -34,8 +35,11 @@ connect_to_network () {
     wpa_supplicant -B -i wls3 -c/etc/wpa_supplicant/"$NETWORK".conf
 }
 
+disconnect_from_network () {
+    dhcpcd -k $iface
+}
+
 search_for_network () {
-    printf "You must be root to use iw's scan feature:\n"
     iw dev "$iface" scan | less
 }
 
@@ -66,6 +70,10 @@ do
 	-c)
 	    NETWORK=$2
 	    connect_to_network
+	    exit 0
+	    ;;
+	-d)
+	    disconnect_from_network
 	    exit 0
 	    ;;
 	-v)
