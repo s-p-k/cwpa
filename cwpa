@@ -2,7 +2,7 @@
 # See LICENSE file for details
 # siren is a simple script to connect to wireless networks on linux machines
 
-# siren version
+# cwpa version
 VERSION=0.1
 
 ################################################################################
@@ -55,7 +55,7 @@ do
 	    exit 0
 	    ;;
 	-l)
-h	    list_configured_networks
+	    list_configured_networks
 	    exit 0
 #	    break
 	    ;;
