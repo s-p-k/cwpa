@@ -10,13 +10,15 @@ VERSION=0.1
 ################################################################################
 
 iface=wls3
-WPASUPPLICANTDIR=/etc/wpa_supplicant/
+WPASUPPLICANTDIR=/etc/wpa_supplicant
 
 ################################################################################
 # functions
 ################################################################################
 
 usage () {
+    printf "Usage:\n"
+    printf "$0 [-h] [-l] [-c NETWORK]\n"
     printf "$0 -h:    show this message\n"
     printf "$0 -l:    list configured networks\n"
     printf "$0 -c:    connect to one of the networks listed with the -l option\n"
@@ -24,14 +26,14 @@ usage () {
 
 
 connect_to_network () {
-    network=$2
-    printf "connecting to network %s...checking permissions\n" $network
-#    sudo wpa_supplicant -B -i wls3 -c/etc/wpa_supplicant/network.conf
+    printf "connecting to %s ...checking permissions\n" "$NETWORK"
+    wpa_supplicant -B -i wls3 -c/etc/wpa_supplicant/"$NETWORK".conf
+    
 }
 
 search_for_network () {
     printf "You must be root to use iw's scan feature:\n"
-    sudo iw dev "$iface" scan | less
+    iw dev "$iface" scan | less
 }
 
 list_configured_networks () {
@@ -58,6 +60,11 @@ do
 	    list_configured_networks
 	    exit 0
 #	    break
+	    ;;
+	-c)
+	    NETWORK=$2
+	    connect_to_network
+	    exit 0
 	    ;;
 	*)
 	    usage
