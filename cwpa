@@ -18,17 +18,20 @@ WPASUPPLICANTDIR=/etc/wpa_supplicant
 
 usage () {
     printf "Usage:\n"
-    printf "$0 [-h] [-l] [-c NETWORK]\n"
-    printf "$0 -h:    show this message\n"
-    printf "$0 -l:    list configured networks\n"
-    printf "$0 -c:    connect to one of the networks listed with the -l option\n"
+    printf "%s [-h] [-l] [-v] [-c NETWORK]\n" "$0"
+    printf "%s -h:    show this message\n" "$0"
+    printf "%s -l:    list configured networks\n" "$0"
+    printf "%s -c:    connect to one of the networks listed with the -l option\n" "$0"
+    printf "%s -v:    show cwpa version\n" "$0"
 }
 
+show_version () {
+    printf "$0-%s\n" "$VERSION"
+}
 
 connect_to_network () {
     printf "connecting to %s ...checking permissions\n" "$NETWORK"
     wpa_supplicant -B -i wls3 -c/etc/wpa_supplicant/"$NETWORK".conf
-    
 }
 
 search_for_network () {
@@ -38,7 +41,6 @@ search_for_network () {
 
 list_configured_networks () {
     ls -1 $WPASUPPLICANTDIR/*.conf
-#    exit 0
 }
 
 ################################################################################
@@ -64,6 +66,10 @@ do
 	-c)
 	    NETWORK=$2
 	    connect_to_network
+	    exit 0
+	    ;;
+	-v)
+	    show_version
 	    exit 0
 	    ;;
 	*)
